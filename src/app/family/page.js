@@ -8,11 +8,9 @@ import {
 	TransitionChild,
 } from "@headlessui/react";
 import {
-	Bars3Icon,
-	CalendarIcon,
-	ChartPieIcon,
-	DocumentDuplicateIcon,
+	HeartIcon,
 	FolderIcon,
+	UserGroupIcon,
 	HomeIcon,
 	UsersIcon,
 	XMarkIcon,
@@ -22,8 +20,8 @@ import FamilyCard from "../components/family/FamilyCard";
 
 const navigation = [
 	{ name: "Home", href: "/home", icon: HomeIcon, current: false },
-	{ name: "Family", href: "/family", icon: UsersIcon, current: true },
-	{ name: "Friends", href: "/friends", icon: FolderIcon, current: false },
+	{ name: "Family", href: "/family", icon: HeartIcon, current: true },
+	{ name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -40,8 +38,8 @@ export default function Family() {
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
-						<Image
-								src="/mcdonalds.jpg"
+							<Image
+								src="/advait.jpeg"
 								alt="Your Company"
 								width={32}
 								height={32}
@@ -60,7 +58,7 @@ export default function Family() {
 														item.current
 															? "bg-gray-50 text-indigo-600"
 															: "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
-														"group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+														"group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
 													)}
 												>
 													<item.icon
@@ -84,9 +82,11 @@ export default function Family() {
 										href="#"
 										className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
 									>
-										<img
+										<Image
+											src="/advait.jpeg"
 											alt=""
-											src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+											width={32}
+											height={32}
 											className="h-8 w-8 rounded-full bg-gray-50"
 										/>
 										<span className="sr-only">Your profile</span>
@@ -102,7 +102,7 @@ export default function Family() {
 				<div className="w-1/3 flex">
 					<div className="p-10 w-full">
 						<h1 className="text-2xl font-bold pb-4">Family Members</h1>
-						<FamilyCard name="John Doe" details="Next of Kin" age="20" occupation="Software Engineer" relationship="Son"/>
+						<FamilyCard name="John Doe" userID="119319" age="20" relationship="Son"/>
 					</div>
 				</div>
 

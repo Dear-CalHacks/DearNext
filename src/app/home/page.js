@@ -14,16 +14,19 @@ import {
 	ChartPieIcon,
 	DocumentDuplicateIcon,
 	FolderIcon,
+  HeartIcon,
 	HomeIcon,
+  UserGroupIcon,
 	UsersIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import SiriCircle from "../components/home/SiriCircle";
 
 const navigation = [
 	{ name: "Home", href: "/home", icon: HomeIcon, current: true },
-	{ name: "Family", href: "/family", icon: UsersIcon, current: false },
-	{ name: "Friends", href: "/friends", icon: FolderIcon, current: false },
+	{ name: "Family", href: "/family", icon: HeartIcon, current: false },
+	{ name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -31,7 +34,6 @@ function classNames(...classes) {
 }
 
 export default function Example() {
-	const [sidebarOpen, setSidebarOpen] = useState(false);
 
 	return (
 		<>
@@ -60,7 +62,7 @@ export default function Example() {
 														item.current
 															? "bg-gray-50 text-indigo-600"
 															: "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
-														"group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6"
+														"group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
 													)}
 												>
 													<item.icon
@@ -101,15 +103,18 @@ export default function Example() {
 				</div>
 
 				{/* Content Area 1 */}
-				<div className="w-1/2">
-					<div className="p-10">
-						<h1 className="text-2xl font-bold pb-4">Conversation</h1>
-						<input
-							type="text"
-							placeholder="Search..."
-							className="w-full p-4 border border-gray-300 rounded-md"
-						/>
-					</div>
+				<div className="w-1/2 min-h-screen flex flex-col items-center justify-between p-10 bg-gray-50">
+					<div className="w-full text-start">
+						<h1 className="text-2xl font-bold">Conversation</h1>
+          </div>
+              
+            <div className="flex-grow flex-col flex items-center justify-center">
+              <SiriCircle sentence="Hello... My name is Kshitij "/>
+              <h1 className="pt-24 font-bold">
+                &quot;Hello.....How are you today?&quot;
+              </h1>
+            </div>
+            <div className="h-20"></div>
 				</div>
 
 				{/* Content Area 2 */}
