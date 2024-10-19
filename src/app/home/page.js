@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import FlaggedNote from "../components/home/FlaggedNote";
 import {
 	Dialog,
 	DialogBackdrop,
@@ -17,6 +18,7 @@ import {
 	UsersIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const navigation = [
 	{ name: "Home", href: "/home", icon: HomeIcon, current: true },
@@ -38,9 +40,11 @@ export default function Example() {
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
-							<img
+							<Image
+								src="/advait.jpeg"
 								alt="Your Company"
-								src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+								width={32}
+								height={32}
 								className="h-8 w-auto"
 							/>
 						</div>
@@ -80,9 +84,11 @@ export default function Example() {
 										href="#"
 										className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
 									>
-										<img
+										<Image
+											src="/advait.jpeg"
 											alt=""
-											src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+											width={32}
+											height={32}
 											className="h-8 w-8 rounded-full bg-gray-50"
 										/>
 										<span className="sr-only">Your profile</span>
@@ -97,7 +103,7 @@ export default function Example() {
 				{/* Content Area 1 */}
 				<div className="w-1/2">
 					<div className="p-10">
-						<h1 className="text-2xl font-bold pb-4">Home</h1>
+						<h1 className="text-2xl font-bold pb-4">Conversation</h1>
 						<input
 							type="text"
 							placeholder="Search..."
@@ -109,8 +115,19 @@ export default function Example() {
 				{/* Content Area 2 */}
 				<div className="w-1/2 border-l">
 					<div className="p-10">
-						<h1 className="text-2xl font-bold">Flagged Conversation</h1>
-						<p>Blah Blah blah.</p>
+						<h1 className="text-2xl font-bold mb-4">Conversation Notes</h1>
+						<FlaggedNote
+							title="Important Note"
+							description="This is an important note."
+						/>
+						<FlaggedNote
+							title="Important Note"
+							description="This is an important note."
+						/>
+						<FlaggedNote
+							title="Important Note"
+							description="This is an important note."
+						/>
 					</div>
 				</div>
 			</div>

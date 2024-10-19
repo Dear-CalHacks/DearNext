@@ -17,6 +17,8 @@ import {
 	UsersIcon,
 	XMarkIcon,
 } from "@heroicons/react/24/outline";
+import Image from "next/image";
+import FamilyCard from "../components/family/FamilyCard";
 
 const navigation = [
 	{ name: "Home", href: "/home", icon: HomeIcon, current: false },
@@ -38,9 +40,11 @@ export default function Family() {
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
-							<img
+						<Image
+								src="/mcdonalds.jpg"
 								alt="Your Company"
-								src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+								width={32}
+								height={32}
 								className="h-8 w-auto"
 							/>
 						</div>
@@ -95,14 +99,10 @@ export default function Family() {
 				</div>
 
 				{/* Content Area 1 */}
-				<div className="w-2/3 flex">
+				<div className="w-1/3 flex">
 					<div className="p-10 w-full">
-						<h1 className="text-2xl font-bold pb-4">Home</h1>
-						<input
-							type="text"
-							placeholder="Search..."
-							className="w-full p-4 border border-gray-300 rounded-md"
-						/>
+						<h1 className="text-2xl font-bold pb-4">Family Members</h1>
+						<FamilyCard name="John Doe" details="Next of Kin" age="20" occupation="Software Engineer" relationship="Son"/>
 					</div>
 				</div>
 

@@ -24,6 +24,8 @@ const navigation = [
 	{ name: "Friends", href: "/friends", icon: FolderIcon, current: true },
 ];
 
+import Image from "next/image";
+
 function classNames(...classes) {
 	return classes.filter(Boolean).join(" ");
 }
@@ -38,9 +40,11 @@ export default function Friends() {
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
-							<img
+						<Image
+								src="/mcdonalds.jpg"
 								alt="Your Company"
-								src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
+								width={32}
+								height={32}
 								className="h-8 w-auto"
 							/>
 						</div>
