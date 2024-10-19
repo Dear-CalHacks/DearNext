@@ -33,9 +33,9 @@ export default function Example() {
 
 	return (
 		<>
-			<div>
+			<div className="flex h-screen text-neutral-700">
 				{/* Desktop Sidebar */}
-				<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
 							<img
@@ -94,15 +94,25 @@ export default function Example() {
 					</div>
 				</div>
 
-				<main className="">
-					<div className="">
-						<div className="px-4 py-10">
-              {/* Main area */}
-            </div>
+				{/* Content Area 1 */}
+				<div className="w-1/2">
+					<div className="p-10">
+						<h1 className="text-2xl font-bold pb-4">Home</h1>
+						<input
+							type="text"
+							placeholder="Search..."
+							className="w-full p-4 border border-gray-300 rounded-md"
+						/>
 					</div>
-				</main>
+				</div>
 
-				<div className="fixed inset-y-0 right-96 hidden min-w-96 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block"></div>
+				{/* Content Area 2 */}
+				<div className="w-1/2 border-l">
+					<div className="p-10">
+						<h1 className="text-2xl font-bold">Flagged Conversation</h1>
+						<p>Blah Blah blah.</p>
+					</div>
+				</div>
 			</div>
 		</>
 	);

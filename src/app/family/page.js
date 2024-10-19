@@ -33,9 +33,9 @@ export default function Family() {
 
 	return (
 		<>
-			<div>
+			<div className="flex h-screen text-neutral-700">
 				{/* Desktop Sidebar */}
-				<div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
 						<div className="flex h-16 items-center">
 							<img
@@ -86,7 +86,7 @@ export default function Family() {
 											className="h-8 w-8 rounded-full bg-gray-50"
 										/>
 										<span className="sr-only">Your profile</span>
-										<span aria-hidden="true">Tom Cook</span>
+										<span aria-hidden="true">Joe Biden</span>
 									</a>
 								</li>
 							</ul>
@@ -94,15 +94,18 @@ export default function Family() {
 					</div>
 				</div>
 
-				<main className="">
-					<div className="">
-						<div className="px-4 py-10">
-              {/* Main area */}
-            </div>
+				{/* Content Area 1 */}
+				<div className="w-2/3 flex">
+					<div className="p-10 w-full">
+						<h1 className="text-2xl font-bold pb-4">Home</h1>
+						<input
+							type="text"
+							placeholder="Search..."
+							className="w-full p-4 border border-gray-300 rounded-md"
+						/>
 					</div>
-				</main>
+				</div>
 
-				<div className="fixed inset-y-0 right-96 hidden min-w-96 overflow-y-auto border-l border-gray-200 px-4 py-6 sm:px-6 lg:px-8 xl:block"></div>
 			</div>
 		</>
 	);
