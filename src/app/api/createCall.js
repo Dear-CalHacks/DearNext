@@ -1,6 +1,6 @@
 import Vapi from "@vapi-ai/web";
 
-export default async function handler(req, res) {
+export default async function handler(req, res) { //test comment
   if (req.method === 'POST') {
     try {
       const vapi = new Vapi(process.env.VAPI_PUBLIC_KEY);
