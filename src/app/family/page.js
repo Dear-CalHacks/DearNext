@@ -10,6 +10,8 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import SiriCircle from "../components/home/SiriCircle";
+import { useEffect } from "react";
+
 
 const navigation = [
   { name: "Home", href: "/home", icon: HomeIcon, current: false },
@@ -27,95 +29,117 @@ export default function Example() {
   const [age, setAge] = useState("");
   const [relation, setRelation] = useState("");
   const [memories, setMemories] = useState("");
-
+  const [familyMembers, setFamilyMembers] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [audioContext, setAudioContext] = useState(null);
   const [mediaStream, setMediaStream] = useState(null);
   const [audioChunks, setAudioChunks] = useState([]);
   const mediaRecorderRef = useRef(null);
+  const [patient_id, setPatientId] = useState("");
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // Generate patient_id on component mount
+  useEffect(() => {
+    // Generate a random integer between 1 and 1,000,000
+    const randomId = Math.floor(Math.random() * 1000000) + 1;
+    setPatientId(randomId.toString());
+  }, []);
 
-    // Create FormData objects
-    const formData = new FormData();
-    const audioData = new FormData();
-
-    // Append the audio file if available
-    if (audioChunks.length > 0) {
-      const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-      audioData.append("audio", audioBlob, "voiceRecording.webm"); // Changed 'audiofile' to 'audio'
-    }
-
-    // Append patient_id (replace with actual patient ID or retrieve from context)
-    const patient_id = "12345"; // Replace with actual patient ID or retrieve from context
-    formData.append("patient_id", patient_id);
-    audioData.append("patient_id", patient_id);
-
-    // Append other form data
-    formData.append("name", name);
-    formData.append("age", age);
-    formData.append("relation", relation);
-    formData.append("memories", memories);
-
+  // Fetch family members when patient_id changes
+  useEffect(() => {
+    const randomId = Math.floor(Math.random() * 1000000) + 1;
+    const newPatientId = randomId.toString();
+    setPatientId(newPatientId);
+    fetchFamilyMembers(newPatientId);
+  }, []);
+  
+  const fetchFamilyMembers = async (id) => {
     try {
-      console.log("Sending request to /cartesia/cloneVoice");
-    
-      const response = await fetch("http://localhost:5000/cartesia/cloneVoice", {
-        method: "POST",
-        body: audioData,
-      });
-    
-      if (response.ok) {
-        // Handle success case
-        const responseData = await response.json(); // Parse JSON response
-        console.log("Audio uploaded successfully", responseData);
-        alert("Audio uploaded successfully!");
+      const response = await fetch(`http://localhost:5000/db/getFamilyMembers/${id}`);
+      const data = await response.json();
+      if (data.success) {
+        setFamilyMembers(data.data);
       } else {
-        // Handle client (4xx) and server (5xx) errors
-        try {
-          const errorData = await response.json();
-          console.error("Failed to upload audio:", errorData.error || errorData.details);
-          alert(`Audio Upload Error: ${errorData.error || errorData.details}`);
-        } catch (jsonError) {
-          // Response isn't JSON, handle as plain text
-          const errorText = await response.text();
-          console.error("Failed to upload audio (non-JSON response):", errorText);
-          alert(`Audio Upload Error: ${errorText}`);
-        }
+        console.error('Error fetching family members:', data.error);
       }
     } catch (error) {
-      // Handle unexpected errors like network failures
-      console.error("Unexpected error uploading Audio:", error);
-      alert("An unexpected error occurred during audio upload.");
-    }
-    
-    try {
-      const response = await fetch("/db/insertContent", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (response.ok) {
-        console.log("Content inserted successfully");
-        // Reset form fields
-        setName("");
-        setAge("");
-        setRelation("");
-        setMemories("");
-        setAudioChunks([]);
-        alert("Family member added successfully!");
-      } else {
-        const errorData = await response.json();
-        console.error("Error inserting content:", errorData.error);
-        alert(`Error: ${errorData.error}`);
-      }
-    } catch (error) {
-      console.error("Unexpected error uploading Data:", error);
-      alert("An unexpected error occurred during data upload.");
+      console.error('Error fetching family members:', error);
     }
   };
+  
+  // Handle form submission
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!patient_id) {
+    alert("Please generate a patient_id first.");
+    return;
+  }
+
+  console.log("Form submission initiated.");
+
+  // Create a single FormData object
+  const formData = new FormData();
+
+  // Append the audio file if available
+  if (audioChunks.length > 0) {
+    const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+    formData.append("audio", audioBlob, "voiceRecording.webm");
+    console.log("Audio file appended to formData.");
+  } else {
+    alert("Please record audio before submitting.");
+    console.error("No audio recorded. Submission aborted.");
+    return;
+  }
+
+  // Append other form data
+  formData.append("patient_id", patient_id);
+  formData.append("name", name);
+  formData.append("age", age);
+  formData.append("relation", relation);
+  formData.append("memories", memories);
+  formData.append("language", "en"); // Add language if required
+
+  console.log("Form data prepared for submission:", {
+    patient_id,
+    name,
+    age,
+    relation,
+    memories,
+  });
+
+  try {
+    // Send the combined data to the backend
+    console.log("Sending POST request to backend...");
+    const response = await fetch("http://localhost:5000/db/insertFamilyMember", {
+      method: "POST",
+      body: formData,
+    });
+
+    console.log("Received response from backend:", response);
+
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log("Family member added successfully:", responseData);
+      alert("Family member added successfully!");
+
+      // Reset form fields
+      setName("");
+      setAge("");
+      setRelation("");
+      setMemories("");
+      setAudioChunks([]);
+
+      // Fetch updated family members list
+      fetchFamilyMembers();
+    } else {
+      const errorData = await response.json();
+      console.error("Error adding family member:", errorData);
+      alert(`Error: ${errorData.error || errorData.details}`);
+    }
+  } catch (error) {
+    console.error("An unexpected error occurred during form submission:", error);
+    alert("An unexpected error occurred.");
+  }
+};
 
   // Handle recording
   const toggleRecording = async () => {
@@ -379,23 +403,14 @@ export default function Example() {
           <h1 className="text-2xl font-bold mb-6">Family Members</h1>
           {/* Existing Family Members Data */}
           <div className="space-y-4">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold">John Doe</h2>
-              <p className="text-gray-600">Age: 45</p>
-              <p className="text-gray-600">Relation: Brother</p>
-              <p className="text-gray-600 mt-2">
-                Memories: Shared trips to the mountains.
-              </p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <h2 className="text-xl font-semibold">Jane Smith</h2>
-              <p className="text-gray-600">Age: 38</p>
-              <p className="text-gray-600">Relation: Sister</p>
-              <p className="text-gray-600 mt-2">
-                Memories: Family gatherings during holidays.
-              </p>
-            </div>
-            {/* Add more family member cards as needed */}
+            {familyMembers && familyMembers.map((member) => (
+              <div key={member._id} className="bg-white p-6 rounded-lg shadow-md">
+                <h2 className="text-xl font-semibold">{member.name}</h2>
+                <p className="text-gray-600">Age: {member.age}</p>
+                <p className="text-gray-600">Relation: {member.relation}</p>
+                <p className="text-gray-600 mt-2">Memories: {member.memories}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
