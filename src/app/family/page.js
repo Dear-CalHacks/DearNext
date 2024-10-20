@@ -120,11 +120,9 @@ export default function Example() {
   // Handle recording
   const toggleRecording = async () => {
     if (isRecording) {
-      // Stop recording
       mediaRecorderRef.current.stop();
       setIsRecording(false);
     } else {
-      // Start recording
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -167,68 +165,68 @@ export default function Example() {
     <>
       <div className="flex h-screen text-neutral-700">
         {/* Desktop Sidebar */}
-        <div className="flex flex-col min-w-64">
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-            <div className="flex h-16 items-center">
-              <Image
-                src="/advait.jpeg" // Ensure this path is correct and the image exists
-                alt="Your Company"
-                width={32}
-                height={32}
-                className="h-8 w-auto"
-              />
-            </div>
-            <nav className="flex flex-1 flex-col">
-              <ul role="list" className="flex flex-1 flex-col gap-y-7">
-                <li>
-                  <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? "bg-gray-50 text-indigo-600"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
-                            "group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
-                          )}
-                        >
-                          <item.icon
-                            aria-hidden="true"
-                            className={classNames(
-                              item.current
-                                ? "text-indigo-600"
-                                : "text-gray-400 group-hover:text-indigo-600",
-                              "h-6 w-6 shrink-0"
-                            )}
-                          />
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+				<div className="flex flex-col min-w-64">
+					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
+						<div className="flex h-16 items-center">
+							<Image
+								src="/deer-image.avif"
+								alt="Your Company"
+								width={56}
+								height={56}
+								className="h-12 w-auto rounded-md"
+							/>
+						</div>
+						<nav className="flex flex-1 flex-col">
+							<ul role="list" className="flex flex-1 flex-col gap-y-7">
+								<li>
+									<ul role="list" className="-mx-2 space-y-1">
+										{navigation.map((item) => (
+											<li key={item.name}>
+												<a
+													href={item.href}
+													className={classNames(
+														item.current
+															? "bg-gray-50 text-slate-900"
+															: "text-gray-700 hover:bg-gray-50 hover:text-slate-900",
+														"group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
+													)}
+												>
+													<item.icon
+														aria-hidden="true"
+														className={classNames(
+															item.current
+																? "text-slate-900"
+																: "text-gray-400 group-hover:text-slate-900",
+															"h-6 w-6 shrink-0"
+														)}
+													/>
+													{item.name}
+												</a>
+											</li>
+										))}
+									</ul>
+								</li>
 
-                <li className="-mx-6 mt-auto">
-                  <a
-                    href="#"
-                    className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
-                  >
-                    <Image
-                      src="/advait.jpeg" // Ensure this path is correct and the image exists
-                      alt=""
-                      width={32}
-                      height={32}
-                      className="h-8 w-8 rounded-full bg-gray-50"
-                    />
-                    <span className="sr-only">Your profile</span>
-                    <span aria-hidden="true">Joe Biden</span>
-                  </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
+								<li className="hidden -mx-6 mt-auto">
+									<a
+										href="#"
+										className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+									>
+										<Image
+											src="/advait.jpeg"
+											alt=""
+											width={32}
+											height={32}
+											className="h-8 w-8 rounded-full bg-gray-50"
+										/>
+										<span className="sr-only">Your profile</span>
+										<span aria-hidden="true">Joe Biden</span>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
 
         {/* Content Area 1 */}
         <div className="w-1/2 min-h-screen flex flex-col items-center justify-start p-10 bg-[#F5F7F8]">
