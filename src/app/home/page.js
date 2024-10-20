@@ -3,25 +3,14 @@
 import { useState, useEffect, useRef } from "react";
 import FlaggedNote from "../components/home/FlaggedNote";
 import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  TransitionChild,
-} from "@headlessui/react";
-import {
-  Bars3Icon,
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  PhoneIcon,
-  FolderIcon,
+  PhoneArrowUpRightIcon,
+  PhoneArrowDownLeftIcon,
   HeartIcon,
   HomeIcon,
   UserGroupIcon,
-  UsersIcon,
-  XMarkIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
+import AudioStreamer from "../components/home/AudioStreamer";
 import SiriCircle from "../components/home/SiriCircle";
 
 const navigation = [
@@ -37,15 +26,21 @@ function classNames(...classes) {
 export default function Example() {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState("");
+  const [audioContext, setAudioContext] = useState(null);
+  const [mediaStream, setMediaStream] = useState(null);
   const recognitionRef = useRef(null);
+  const [micIconAnimation, setMicIconAnimation] = useState(false);
 
   useEffect(() => {
     if (!("webkitSpeechRecognition" in window)) {
-      alert("Your browser does not support speech recognition. Please use Chrome or Edge.");
+      alert(
+        "Your browser does not support speech recognition. Please use Chrome or Edge."
+      );
       return;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
     recognitionRef.current = new SpeechRecognition();
     recognitionRef.current.continuous = true;
     recognitionRef.current.interimResults = true;
@@ -70,25 +65,17 @@ export default function Example() {
     };
   }, []);
 
-  const startRecording = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.start();
-      setIsRecording(true);
-    }
-  };
-
-  const stopRecording = () => {
-    if (recognitionRef.current) {
-      recognitionRef.current.stop();
-      setIsRecording(false);
-    }
-  };
-
   const toggleRecording = () => {
     if (isRecording) {
-      stopRecording();
+      recognitionRef.current.stop();
+      setIsRecording(false);
+      setMicIconAnimation(true); // Trigger animation when recording stops
+      setTimeout(() => setMicIconAnimation(false), 2500); // Reset animation after 2.5 seconds
     } else {
-      startRecording();
+      recognitionRef.current.start();
+      setIsRecording(true);
+      setMicIconAnimation(true); // Trigger animation when recording starts
+      setTimeout(() => setMicIconAnimation(false), 2500); // Reset animation after 2.5 seconds
     }
   };
 
@@ -160,22 +147,28 @@ export default function Example() {
         </div>
 
         {/* Content Area 1 */}
-        <div className="w-1/2 min-h-screen flex flex-col items-center justify-between p-10 bg-gray-50">
+        <div className="w-1/2 min-h-screen flex flex-col items-center justify-between p-10 bg-[#F5F7F8]">
           <div className="w-full text-start flex justify-between">
-            <h1 className="text-2xl font-bold">Conversation</h1>
-            <PhoneIcon
-              className={`h-7 w-7 mr-2 mt-1 cursor-pointer ${
-                isRecording ? "text-red-500" : "text-green-400 hover:text-green-600"
-              }`}
-              aria-hidden="true"
+            <h1 className="text-2xl font-bold">Sample Audio</h1>
+            <button
+              className={`h-10 w-10 ${isRecording ? 'text-red-500' : 'text-green-500'} ${micIconAnimation ? 'animate-bounce' : ''}`}
               onClick={toggleRecording}
-            />
+              aria-label={isRecording ? "Stop Recording" : "Start Recording"}
+            >
+              {isRecording ? <PhoneArrowDownLeftIcon className="h-6 w-6" /> : <PhoneArrowUpRightIcon className="h-6 w-6" />}
+            </button>
           </div>
 
           <div className="flex-grow flex-col flex items-center justify-center">
-            <SiriCircle sentence={transcript || "Say something..."} />
-            <h1 className="pt-24 font-bold">
-              {transcript ? `"${transcript}"` : 'Click the microphone to start speaking'}
+            <AudioStreamer isRecording={isRecording} setAudioContext={setAudioContext} setMediaStream={setMediaStream}/>
+            {isRecording && audioContext && mediaStream && (
+              <SiriCircle
+                audioContext={audioContext}
+                mediaStream={mediaStream}
+              />
+            )}
+            <h1 className="pt-16 font-bold">
+              {(transcript && isRecording) ? `"${transcript}"` : 'Click the microphone to start the call'}
             </h1>
           </div>
           <div className="h-20"></div>

@@ -1,40 +1,52 @@
-import { useEffect, useState } from 'react';
+// components/SiriWaveform.js
+import React, { useEffect, useRef } from 'react';
 
-export default function SiriDonuts({ sentence }) {
-  const [scales, setScales] = useState([1, 1, 1, 1, 1]);
-  const words = sentence.split(' ');
+const SiriWaveform = ({ audioContext, mediaStream }) => {
+    const canvasRef = useRef(null);
+    const requestRef = useRef();
+    const analyserRef = useRef();
 
-  useEffect(() => {
-    let wordIndex = 0;
+    useEffect(() => {
+        if (!audioContext || !mediaStream) {
+            return;
+        }
 
-    const interval = setInterval(() => {
-      const currentWord = words[wordIndex % words.length];
-      const transitionSpeed = Math.max(200, currentWord.length * 100); // Longer word -> slower transition
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext('2d');
+        const analyser = audioContext.createAnalyser();
+        analyserRef.current = analyser;
 
-      setScales((prevScales) =>
-        prevScales.map((_, index) => Math.sin(Date.now() / transitionSpeed + index) * 0.25 + 1)
-      );
+        const source = audioContext.createMediaStreamSource(mediaStream);
+        source.connect(analyser);
 
-      wordIndex++;
-    }, 10); // Switch word every 500ms
+        analyser.fftSize = 256;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
 
-    return () => clearInterval(interval);
-  }, [words]);
+        const draw = () => {
+            requestRef.current = requestAnimationFrame(draw);
 
-  return (
-    <div className="relative flex items-center justify-center w-96 h-96">
-      {scales.map((scale, index) => (
-        <div
-          key={index}
-          className={`absolute border-2 border-black rounded-full opacity-70`}
-          style={{
-            width: `${150 + index * 30}px`,
-            height: `${150 + index * 30}px`,
-            transform: `scale(${scale})`,
-            transition: `transform 0.3s ease-in-out`,
-          }}
-        />
-      ))}
-    </div>
-  );
-}
+            analyser.getByteFrequencyData(dataArray);
+            const average = dataArray.reduce((a, b) => a + b, 0) / bufferLength;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2, average * 0.95, 0, 2 * Math.PI, false);
+            ctx.fillStyle = `rgba(229, 229, 229, ${Math.min(1, average / 128)})`;  // Blue, opacity based on volume
+            ctx.fill();
+        };
+
+        draw();
+        return () => {
+            cancelAnimationFrame(requestRef.current);
+            analyser.disconnect();
+            source.disconnect();
+        };
+    }, [audioContext, mediaStream]);
+
+    return (
+        <canvas ref={canvasRef} width="300" height="300" className="bg-black rounded-full"></canvas>
+    );
+};
+
+export default SiriWaveform;
