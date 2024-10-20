@@ -8,6 +8,8 @@ import {
   HeartIcon,
   HomeIcon,
   UserGroupIcon,
+  BookmarkIcon,
+  CogIcon
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import AudioStreamer from "../components/home/AudioStreamer";
@@ -16,7 +18,8 @@ import SiriCircle from "../components/home/SiriCircle";
 const navigation = [
   { name: "Home", href: "/home", icon: HomeIcon, current: true },
   { name: "Family", href: "/family", icon: HeartIcon, current: false },
-  { name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
+  { name: "Saved Notes", href: "/bookmarks", icon: BookmarkIcon, current: false },
+  { name: "Settings", href: "/settings", icon: CogIcon, current: false }
 ];
 
 function classNames(...classes) {
@@ -87,7 +90,7 @@ export default function Example() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 items-center">
               <Image
-                src="/advait.jpeg"
+                src="/letter-d.svg"
                 alt="Your Company"
                 width={32}
                 height={32}
@@ -104,8 +107,8 @@ export default function Example() {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-gray-50 text-indigo-600"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
+                              ? "bg-gray-50 text-sky-300"
+                              : "text-gray-700 hover:bg-gray-50 hover:text-sky-300",
                             "group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
                           )}
                         >
@@ -113,8 +116,8 @@ export default function Example() {
                             aria-hidden="true"
                             className={classNames(
                               item.current
-                                ? "text-indigo-600"
-                                : "text-gray-400 group-hover:text-indigo-600",
+                                ? "text-sky-300"
+                                : "text-gray-400 group-hover:text-sky-300",
                               "h-6 w-6 shrink-0"
                             )}
                           />
@@ -125,7 +128,7 @@ export default function Example() {
                   </ul>
                 </li>
 
-                <li className="-mx-6 mt-auto">
+                <li className="hidden -mx-6 mt-auto">
                   <a
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
@@ -149,7 +152,7 @@ export default function Example() {
         {/* Content Area 1 */}
         <div className="w-1/2 min-h-screen flex flex-col items-center justify-between p-10 bg-[#F5F7F8]">
           <div className="w-full text-start flex justify-between">
-            <h1 className="text-2xl font-bold">Sample Audio</h1>
+            <h1 className="text-2xl font-bold">Start a Call!</h1>
             <button
               className={`h-10 w-10 ${isRecording ? 'text-red-500' : 'text-green-500'} ${micIconAnimation ? 'animate-bounce' : ''}`}
               onClick={toggleRecording}
@@ -175,20 +178,20 @@ export default function Example() {
         </div>
 
         {/* Content Area 2 */}
-        <div className="w-1/2 border-l">
-          <div className="p-10">
+        <div className="w-1/3 border-l">
+          <div className="p-10 flex flex-col items-center">
             <h1 className="text-2xl font-bold mb-4">Conversation Notes</h1>
             <FlaggedNote
-              title="Important Note"
-              description="This is an important note."
+              title="Raj does not remember Kshitij"
+              description="Raj has mentioned not remembering Kshitij. Preparing Kshitij's voice next."
             />
             <FlaggedNote
-              title="Important Note"
-              description="This is an important note."
+              title="Raj does not remember graduating High School"
+              description="Raj has mentioned not remembering graduating High School."
             />
             <FlaggedNote
-              title="Important Note"
-              description="This is an important note."
+              title="Raj does not remember Jessica"
+              description="Raj has mentioned not remembering Jessica. Preparing Jessica's voice next."
             />
           </div>
         </div>

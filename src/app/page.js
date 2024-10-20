@@ -1,18 +1,37 @@
+"use client";
+
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
 import Image from 'next/image'
+import { useState, useEffect } from 'react'
 
-export default function Example() {
+export default function Landing() {
+  const [dots, setDots] = useState('')
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDots((prevDots) => {
+        if (prevDots.length === 6) {
+          return ''
+        }
+        return prevDots + '. '
+      })
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="relative isolate overflow-hidden bg-white">
+    <div className="relative isolate overflow-hidden bg-white pt-16">
       <svg
         aria-hidden="true"
-        className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
+        className="absolute inset-0 -z-10 h-full w-full stroke-gray-200 
+        [mask-image:radial-gradient(100%_100%_at_top_right,white,transparent)]"
       >
         <defs>
           <pattern
             x="50%"
             y={-1}
-            id="0787a7c5-978c-4f66-83c7-11c213f99cb7"
+            id="background-pattern"
             width={200}
             height={200}
             patternUnits="userSpaceOnUse"
@@ -20,39 +39,34 @@ export default function Example() {
             <path d="M.5 200V.5H200" fill="none" />
           </pattern>
         </defs>
-        <rect fill="url(#0787a7c5-978c-4f66-83c7-11c213f99cb7)" width="100%" height="100%" strokeWidth={0} />
+        <rect fill="url(#background-pattern)" width="100%" height="100%" strokeWidth={0} />
       </svg>
+
       <div className="mx-auto max-w-7xl px-6 pb-24 pt-10 sm:pb-32 lg:flex lg:px-8 lg:py-40">
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
           <Image
             alt="Your Company"
-            src="/logos/mark.svg?color=indigo&shade=600" // Changed src to a local path
+            src="/letter-d.svg"
             width={44}
             height={11}
             className="h-11"
           />
           <div className="mt-24 sm:mt-32 lg:mt-16">
-            <a href="#" className="inline-flex space-x-6">
-              <span className="rounded-full bg-indigo-600/10 px-3 py-1 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-600/10">
-                What&apos;s new
-              </span>
-              <span className="inline-flex items-center space-x-2 text-sm font-medium leading-6 text-gray-600">
-                <span>Just shipped v1.0</span>
-                <ChevronRightIcon aria-hidden="true" className="h-5 w-5 text-gray-400" />
-              </span>
-            </a>
+
           </div>
           <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Deploy to the cloud with confidence
+            Dear{' '}<span className="text-sky-300">{dots}</span>
+          </h1>
+          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+            Reconnect with Loved Ones
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
-            Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet
-            fugiat veniam occaecat fugiat aliqua.
+            Helping Alzheimer's patients remember their loved ones by recreating familiar voices and cherished memories, strengthening family bonds and bringing comfort.
           </p>
           <div className="mt-10 flex items-center gap-x-6">
             <a
-              href="#"
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              href="/home"
+              className="rounded-md bg-sky-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Get started
             </a>
@@ -66,7 +80,7 @@ export default function Example() {
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
               <Image
                 alt="App screenshot"
-                src="/component-images/project-app-screenshot.png" // Changed src to a local path
+                src="/sample_2.png" // Changed src to a local path
                 width={2432}
                 height={1442}
                 className="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"

@@ -32,7 +32,7 @@ const SiriWaveform = ({ audioContext, mediaStream }) => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.beginPath();
             ctx.arc(canvas.width / 2, canvas.height / 2, average * 0.95, 0, 2 * Math.PI, false);
-            ctx.fillStyle = `rgba(229, 229, 229, ${Math.min(1, average / 128)})`;  // Blue, opacity based on volume
+            ctx.fillStyle = `rgba(165, 225, 244, ${Math.min(1, average / 12)})`;  // Blue, opacity based on volume
             ctx.fill();
         };
 
@@ -45,7 +45,7 @@ const SiriWaveform = ({ audioContext, mediaStream }) => {
     }, [audioContext, mediaStream]);
 
     return (
-        <canvas ref={canvasRef} width="300" height="300" className="bg-black rounded-full"></canvas>
+        <canvas ref={canvasRef} width="300" height="300" className="bg-transparent rounded-full border border-2 border-sky-300"></canvas>
     );
 };
 

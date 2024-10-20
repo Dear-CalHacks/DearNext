@@ -6,6 +6,8 @@ import {
   HeartIcon,
   UserGroupIcon,
   MicrophoneIcon,
+	BookmarkIcon,
+	CogIcon,
   StopIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -14,7 +16,8 @@ import SiriCircle from "../components/home/SiriCircle";
 const navigation = [
   { name: "Home", href: "/home", icon: HomeIcon, current: false },
   { name: "Family", href: "/family", icon: HeartIcon, current: true },
-  { name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
+	{ name: "Saved Notes", href: "/bookmarks", icon: BookmarkIcon, current: false },
+  { name: "Settings", href: "/settings", icon: CogIcon, current: false }
 ];
 
 function classNames(...classes) {
@@ -59,7 +62,7 @@ export default function Example() {
     formData.append("memories", memories);
 
 		try {
-			const response = await fetch('send it to cartisea for clonning', {
+			const response = await fetch('/sample/url', {
 				method: 'POST',
 				body: audioData,
 			});
@@ -166,7 +169,7 @@ export default function Example() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 items-center">
               <Image
-                src="/advait.jpeg"
+                src="/letter-d.svg"
                 alt="Your Company"
                 width={32}
                 height={32}
@@ -183,8 +186,8 @@ export default function Example() {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-gray-50 text-indigo-600"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
+                              ? "bg-gray-50 text-sky-300"
+                              : "text-gray-700 hover:bg-gray-50 hover:text-sky-300",
                             "group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
                           )}
                         >
@@ -192,8 +195,8 @@ export default function Example() {
                             aria-hidden="true"
                             className={classNames(
                               item.current
-                                ? "text-indigo-600"
-                                : "text-gray-400 group-hover:text-indigo-600",
+                                ? "text-sky-300"
+                                : "text-gray-400 group-hover:text-sky-300",
                               "h-6 w-6 shrink-0"
                             )}
                           />
@@ -204,13 +207,13 @@ export default function Example() {
                   </ul>
                 </li>
 
-                <li className="-mx-6 mt-auto">
+                <li className="hidden -mx-6 mt-auto">
                   <a
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                   >
                     <Image
-                      src="/advait.jpeg"
+                      src="/letter-d.svg"
                       alt=""
                       width={32}
                       height={32}
@@ -319,7 +322,7 @@ export default function Example() {
                   className={`${
                     isRecording
                       ? "bg-red-500 text-white"
-                      : "border border-green-500 text-green-500"
+                      : "border border-green-500 text-green-500 hover:bg-green-500 hover:text-white"
                   } font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline inline-flex items-center`}
                   style={{ order: 1 }}
                 >
@@ -328,9 +331,9 @@ export default function Example() {
                       <StopIcon className="h-5 w-5 mr-2" /> Stop Recording
                     </>
                   ) : (
-                    <>
-                      <MicrophoneIcon className="h-5 mr-2" /> Start Recording
-                    </>
+                    <div className="hover:bg-green-500 hover:text-white flex">
+                      <MicrophoneIcon className="h-5 mr-2 " /> Start Recording
+                    </div>
                   )}
                 </button>
                 {audioChunks.length > 0 && (
@@ -356,7 +359,7 @@ export default function Example() {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                className="hover:bg-sky-300 hover:text-white bg-transparent text-sky-300 border border-sky-300 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
               >
                 Submit
               </button>
