@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   HomeIcon,
   HeartIcon,
   UserGroupIcon,
   MicrophoneIcon,
-	BookmarkIcon,
-	CogIcon,
   StopIcon,
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
@@ -16,8 +14,7 @@ import SiriCircle from "../components/home/SiriCircle";
 const navigation = [
   { name: "Home", href: "/home", icon: HomeIcon, current: false },
   { name: "Family", href: "/family", icon: HeartIcon, current: true },
-	{ name: "Saved Notes", href: "/bookmarks", icon: BookmarkIcon, current: false },
-  { name: "Settings", href: "/settings", icon: CogIcon, current: false }
+  { name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -25,6 +22,7 @@ function classNames(...classes) {
 }
 
 export default function Example() {
+  // State Variables
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [relation, setRelation] = useState("");
@@ -40,20 +38,20 @@ export default function Example() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Create a FormData object
+    // Create FormData objects
     const formData = new FormData();
-		const audioData = new FormData();
+    const audioData = new FormData();
 
-    // Append the audio file
+    // Append the audio file if available
     if (audioChunks.length > 0) {
       const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-      audioDate.append("audiofile", audioBlob, "voiceRecording.webm");
+      audioData.append("audio", audioBlob, "voiceRecording.webm"); // Changed 'audiofile' to 'audio'
     }
 
-    // Append patient_id (assuming you have it)
-    const patient_id = "12345"; // Replace with actual patient ID or get from context
+    // Append patient_id (replace with actual patient ID or retrieve from context)
+    const patient_id = "12345"; // Replace with actual patient ID or retrieve from context
     formData.append("patient_id", patient_id);
-		audioData.append("patient_id", patient_id);
+    audioData.append("patient_id", patient_id);
 
     // Append other form data
     formData.append("name", name);
@@ -61,22 +59,38 @@ export default function Example() {
     formData.append("relation", relation);
     formData.append("memories", memories);
 
-		try {
-			const response = await fetch('/sample/url', {
-				method: 'POST',
-				body: audioData,
-			});
-
-			if (response.ok) {
-				console.log("HIP HIP HOORAH")
-			}
-		} catch (error) {
-			console.error("Unexpected error uploading Audio:", error);
-      alert("An unexpected error occurred.");
-		}
-
-
-
+    try {
+      console.log("Sending request to /cartesia/cloneVoice");
+    
+      const response = await fetch("http://localhost:5000/cartesia/cloneVoice", {
+        method: "POST",
+        body: audioData,
+      });
+    
+      if (response.ok) {
+        // Handle success case
+        const responseData = await response.json(); // Parse JSON response
+        console.log("Audio uploaded successfully", responseData);
+        alert("Audio uploaded successfully!");
+      } else {
+        // Handle client (4xx) and server (5xx) errors
+        try {
+          const errorData = await response.json();
+          console.error("Failed to upload audio:", errorData.error || errorData.details);
+          alert(`Audio Upload Error: ${errorData.error || errorData.details}`);
+        } catch (jsonError) {
+          // Response isn't JSON, handle as plain text
+          const errorText = await response.text();
+          console.error("Failed to upload audio (non-JSON response):", errorText);
+          alert(`Audio Upload Error: ${errorText}`);
+        }
+      }
+    } catch (error) {
+      // Handle unexpected errors like network failures
+      console.error("Unexpected error uploading Audio:", error);
+      alert("An unexpected error occurred during audio upload.");
+    }
+    
     try {
       const response = await fetch("/db/insertContent", {
         method: "POST",
@@ -84,9 +98,8 @@ export default function Example() {
       });
 
       if (response.ok) {
-        // Handle successful response
         console.log("Content inserted successfully");
-        // Reset form
+        // Reset form fields
         setName("");
         setAge("");
         setRelation("");
@@ -94,14 +107,13 @@ export default function Example() {
         setAudioChunks([]);
         alert("Family member added successfully!");
       } else {
-        // Handle errors
         const errorData = await response.json();
         console.error("Error inserting content:", errorData.error);
         alert(`Error: ${errorData.error}`);
       }
     } catch (error) {
       console.error("Unexpected error uploading Data:", error);
-      alert("An unexpected error occurred.");
+      alert("An unexpected error occurred during data upload.");
     }
   };
 
@@ -127,7 +139,7 @@ export default function Example() {
           chunks.push(event.data);
         };
 
-        mediaRecorder.onstop = async () => {
+        mediaRecorder.onstop = () => {
           setAudioChunks(chunks);
           // Clean up
           stream.getTracks().forEach((track) => track.stop());
@@ -137,23 +149,13 @@ export default function Example() {
           // Create a Blob from the chunks
           const audioBlob = new Blob(chunks, { type: "audio/webm" });
 
-          // Upload the audio to the backend for cloning
-          const cloneFormData = new FormData();
-          cloneFormData.append("audio", audioBlob, "voiceRecording.webm");
-
-          try {
-            await fetch("/clone-audio", {
-              method: "POST",
-              body: cloneFormData,
-            });
-            console.log("Audio sent for cloning successfully");
-          } catch (err) {
-            console.error("Error sending audio for cloning:", err);
-          }
+          // Note: We're not uploading here; upload occurs on form submission
+          console.log("Recording stopped and audio chunks saved.");
         };
 
         mediaRecorder.start();
         setIsRecording(true);
+        console.log("Recording started.");
       } catch (err) {
         console.error("Error accessing microphone:", err);
         alert("Could not access microphone. Please check permissions.");
@@ -169,7 +171,7 @@ export default function Example() {
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 items-center">
               <Image
-                src="/letter-d.svg"
+                src="/advait.jpeg" // Ensure this path is correct and the image exists
                 alt="Your Company"
                 width={32}
                 height={32}
@@ -186,8 +188,8 @@ export default function Example() {
                           href={item.href}
                           className={classNames(
                             item.current
-                              ? "bg-gray-50 text-sky-300"
-                              : "text-gray-700 hover:bg-gray-50 hover:text-sky-300",
+                              ? "bg-gray-50 text-indigo-600"
+                              : "text-gray-700 hover:bg-gray-50 hover:text-indigo-600",
                             "group flex gap-x-3 rounded-md p-6 text-sm font-semibold leading-6"
                           )}
                         >
@@ -195,8 +197,8 @@ export default function Example() {
                             aria-hidden="true"
                             className={classNames(
                               item.current
-                                ? "text-sky-300"
-                                : "text-gray-400 group-hover:text-sky-300",
+                                ? "text-indigo-600"
+                                : "text-gray-400 group-hover:text-indigo-600",
                               "h-6 w-6 shrink-0"
                             )}
                           />
@@ -207,13 +209,13 @@ export default function Example() {
                   </ul>
                 </li>
 
-                <li className="hidden -mx-6 mt-auto">
+                <li className="-mx-6 mt-auto">
                   <a
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                   >
                     <Image
-                      src="/letter-d.svg"
+                      src="/advait.jpeg" // Ensure this path is correct and the image exists
                       alt=""
                       width={32}
                       height={32}
@@ -237,6 +239,7 @@ export default function Example() {
             className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md"
             onSubmit={handleSubmit}
           >
+            {/* Name Field */}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -255,6 +258,7 @@ export default function Example() {
               />
             </div>
 
+            {/* Age Field */}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -274,6 +278,7 @@ export default function Example() {
               />
             </div>
 
+            {/* Relation Field */}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -292,6 +297,7 @@ export default function Example() {
               />
             </div>
 
+            {/* Memories Field */}
             <div className="mb-4">
               <label
                 className="block text-gray-700 text-sm font-bold mb-2"
@@ -318,7 +324,7 @@ export default function Example() {
               <div className="flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={toggleRecording}
+                  onClick={toggleRecording} // Ensure toggleRecording is defined
                   className={`${
                     isRecording
                       ? "bg-red-500 text-white"
@@ -331,9 +337,9 @@ export default function Example() {
                       <StopIcon className="h-5 w-5 mr-2" /> Stop Recording
                     </>
                   ) : (
-                    <div className="hover:bg-green-500 hover:text-white flex">
-                      <MicrophoneIcon className="h-5 mr-2 " /> Start Recording
-                    </div>
+                    <>
+                      <MicrophoneIcon className="h-5 mr-2" /> Start Recording
+                    </>
                   )}
                 </button>
                 {audioChunks.length > 0 && (
@@ -356,10 +362,11 @@ export default function Example() {
               )}
             </div>
 
+            {/* Submit Button */}
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="hover:bg-sky-300 hover:text-white bg-transparent text-sky-300 border border-sky-300 font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
               >
                 Submit
               </button>
@@ -371,7 +378,6 @@ export default function Example() {
         <div className="w-1/2 border-l p-10">
           <h1 className="text-2xl font-bold mb-6">Family Members</h1>
           {/* Existing Family Members Data */}
-          {/* Replace the below with dynamic data as needed */}
           <div className="space-y-4">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-xl font-semibold">John Doe</h2>
