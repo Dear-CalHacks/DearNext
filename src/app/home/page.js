@@ -14,6 +14,8 @@ import {
 import Image from "next/image";
 import AudioStreamer from "../components/home/AudioStreamer";
 import SiriCircle from "../components/home/SiriCircle";
+import axios from "axios";
+import Vapi from '@vapi-ai/web';
 
 const navigation = [
   { name: "Home", href: "/home", icon: HomeIcon, current: true },
@@ -33,6 +35,7 @@ export default function Example() {
   const [mediaStream, setMediaStream] = useState(null);
   const recognitionRef = useRef(null);
   const [micIconAnimation, setMicIconAnimation] = useState(false);
+  const [vapi, setVapi] = useState(null);
 
   useEffect(() => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -155,9 +158,12 @@ export default function Example() {
             <h1 className="text-2xl font-bold">Start a Call!</h1>
             <button
               className={`h-10 w-10 ${isRecording ? 'text-red-500' : 'text-green-500'} ${micIconAnimation ? 'animate-bounce' : ''}`}
-              onClick={toggleRecording}
+              onClick={() => {
+                toggleRecording();    // The original functionality
+                startNurseAssistantCall(); // The new nurse assistant call
+              }}
               aria-label={isRecording ? "Stop Recording" : "Start Recording"}
-            >
+              >
               {isRecording ? <PhoneArrowDownLeftIcon className="h-6 w-6" /> : <PhoneArrowUpRightIcon className="h-6 w-6" />}
             </button>
           </div>
@@ -199,3 +205,53 @@ export default function Example() {
     </>
   );
 }
+
+const startNurseAssistantCall = async () => {
+  console.log('Starting the nurse assistant call process...');
+
+  try {
+    // Log the API request
+    console.log('Sending POST request to /api/createCall...');
+    const response = await axios.post('/api/createCall');
+
+    // Log the raw response
+    console.log('Response received from /api/createCall:', response);
+
+    // Parse the response data
+    const data = await response.json();
+    console.log('Parsed response data:', data);
+
+    if (response.ok) {
+      console.log('Nurse assistant created successfully', data);
+      const assistantId = data.assistantId;
+      console.log('Assistant ID:', assistantId);
+
+      // Initialize Vapi Web SDK
+      console.log('Initializing Vapi Web SDK with public key...');
+      const vapiInstance = new Vapi('your-public-api-key');
+      setVapi(vapiInstance);
+      console.log('Vapi instance initialized:', vapiInstance);
+
+      // Start the Vapi call
+      console.log(`Starting Vapi call with assistant ID: ${assistantId}...`);
+      await vapiInstance.start(assistantId);
+      console.log('Vapi call started successfully.');
+
+      // Handle Vapi events
+      vapiInstance.on('call-start', () => {
+        console.log('Call has started.');
+      });
+
+      vapiInstance.on('call-end', () => {
+        console.log('Call has ended.');
+        setIsRecording(false);
+      });
+
+      setIsRecording(true);
+    } else {
+      console.error('Failed to start the nurse assistant call:', data.error);
+    }
+  } catch (error) {
+    console.error('Error starting the nurse assistant call:', error);
+  }
+};
