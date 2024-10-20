@@ -46,16 +46,16 @@ export default function Landing() {
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-xl lg:flex-shrink-0 lg:pt-8">
           <Image
             alt="Your Company"
-            src="/letter-d.svg"
-            width={44}
-            height={11}
-            className="h-11"
+            src="/deer-image.avif"
+            width={56}
+            height={56}
+            className="h-12 rounded-md"
           />
           <div className="mt-24 sm:mt-32 lg:mt-16">
 
           </div>
           <h1 className="mt-10 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Dear{' '}<span className="text-sky-300">{dots}</span>
+            Dear{' '}<span className="text-slate-900">{dots}</span>
           </h1>
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
             Reconnect with Loved Ones
@@ -66,7 +66,7 @@ export default function Landing() {
           <div className="mt-10 flex items-center gap-x-6">
             <a
               href="/home"
-              className="rounded-md bg-sky-300 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="rounded-md bg-slate-900 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-slate-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
               Get started
             </a>
@@ -80,7 +80,7 @@ export default function Landing() {
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
               <Image
                 alt="App screenshot"
-                src="/sample_2.png" // Changed src to a local path
+                src="/screenshot.png" // Changed src to a local path
                 width={2432}
                 height={1442}
                 className="w-[76rem] rounded-md shadow-2xl ring-1 ring-gray-900/10"

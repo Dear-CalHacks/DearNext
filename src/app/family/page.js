@@ -5,6 +5,8 @@ import {
   HomeIcon,
   HeartIcon,
   UserGroupIcon,
+	BookmarkIcon,
+	CogIcon,
   MicrophoneIcon,
   StopIcon,
 } from "@heroicons/react/24/outline";
@@ -12,9 +14,15 @@ import Image from "next/image";
 import SiriCircle from "../components/home/SiriCircle";
 
 const navigation = [
-  { name: "Home", href: "/home", icon: HomeIcon, current: false },
-  { name: "Family", href: "/family", icon: HeartIcon, current: true },
-  { name: "Friends", href: "/friends", icon: UserGroupIcon, current: false },
+	{ name: "Home", href: "/home", icon: HomeIcon, current: false },
+	{ name: "Family", href: "/family", icon: HeartIcon, current: true },
+	{
+		name: "Saved Notes",
+		href: "/bookmarks",
+		icon: BookmarkIcon,
+		current: false,
+	},
+	{ name: "Settings", href: "/settings", icon: CogIcon, current: false },
 ];
 
 function classNames(...classes) {
@@ -167,7 +175,7 @@ export default function Example() {
         {/* Desktop Sidebar */}
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-						<div className="flex h-16 items-center">
+					<div className="flex h-16 items-center justify-center pt-5">
 							<Image
 								src="/deer-image.avif"
 								alt="Your Company"
@@ -364,7 +372,7 @@ export default function Example() {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
+                className="bg-slate-900 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline"
               >
                 Submit
               </button>

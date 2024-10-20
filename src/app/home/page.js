@@ -106,7 +106,7 @@ export default function Example() {
 				{/* Desktop Sidebar */}
 				<div className="flex flex-col min-w-64">
 					<div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-						<div className="flex h-16 items-center">
+						<div className="flex h-16 items-center justify-center pt-5">
 							<Image
 								src="/deer-image.avif"
 								alt="Your Company"
